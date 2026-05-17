@@ -1,5 +1,5 @@
 # Lista de Exercício MER
-
+Universidade de Brasília Instituto de Ciências Exatas Departamento de Ciência da Computação Disciplina: Banco de Dados
 ## Projeto de Banco de Dados para o DETRAN-DF
 
 O DETRAN do Distrito Federal deseja constituir um banco de dados para controlar as infrações ocorridas.

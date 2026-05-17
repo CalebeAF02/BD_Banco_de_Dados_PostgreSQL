@@ -1,4 +1,5 @@
 # Análise Teórica das Escolhas no MER/MR
+Universidade de Brasília Instituto de Ciências Exatas Departamento de Ciência da Computação Disciplina: Banco de Dados
 
 Este arquivo responde de forma teórica às decisões tomadas no modelo MER/MR do DETRAN.
 
