@@ -1,0 +1,117 @@
+@startuml DER_DETRAN_PostgreSQL
+
+title Diagrama Entidade-Relacionamento - DETRAN\nPostgreSQL
+
+skinparam linetype ortho
+skinparam padding 10
+skinparam margin 20
+skinparam nodesep 100
+skinparam ranksep 150
+skinparam minClassWidth 150
+
+skinparam class {
+    BorderColor #333333
+    ArrowColor #333333
+}
+
+entity "PROPRIETÁRIO" as proprietario {
+    * cpf : VARCHAR(11) <<KEY>>
+    --
+    nome : VARCHAR(100)
+    endereco : VARCHAR(150)
+    bairro : VARCHAR(50)
+    cidade : VARCHAR(50)
+    estado : VARCHAR(2)
+    sexo : CHAR(1)
+    data_nascimento : DATE
+    idade : INTEGER
+}
+
+entity "VEÍCULO" as veiculo {
+    * placa : VARCHAR(8) <<KEY>>
+    --
+    chassi : VARCHAR(17)
+    cor_predominante : VARCHAR(20)
+    ano_fabricacao : INTEGER
+    cpf_proprietario : VARCHAR(11) <<FK>>
+    cod_modelo : INTEGER <<FK>>
+    cod_categoria : INTEGER <<FK>>
+}
+
+entity "MODELO" as modelo {
+    * cod_modelo : INTEGER <<KEY>>
+    --
+    descricao : VARCHAR(100)
+    marca : VARCHAR(50)
+}
+
+entity "CATEGORIA" as categoria {
+    * cod_categoria : INTEGER <<KEY>>
+    --
+    descricao : VARCHAR(50)
+}
+
+entity "TIPO_INFRAÇÃO" as tipo_infraçao {
+    * cod_infacao : INTEGER <<KEY>>
+    --
+    descricao : VARCHAR(150)
+    valor : DECIMAL(10,2)
+}
+
+entity "OCORRÊNCIA_INFRAÇÃO" as ocorrencia {
+    * id_ocorrencia : INTEGER <<KEY>>
+    --
+    placa_veiculo : VARCHAR(8) <<FK>>
+    cod_tipo_infacao : INTEGER <<FK>>
+    cod_local : INTEGER <<FK>>
+    matricula_agente : INTEGER <<FK>>
+    data_hora : TIMESTAMP
+    velocidade_aferida : INTEGER
+}
+
+entity "LOCAL" as local {
+    * cod_local : INTEGER <<KEY>>
+    --
+    localizacao : VARCHAR(150)
+    velocidade_permitida : INTEGER
+    latitude : DECIMAL(10,8)
+    longitude : DECIMAL(10,8)
+}
+
+entity "AGENTE_TRANSITO" as agente {
+    * matricula : INTEGER <<KEY>>
+    --
+    nome : VARCHAR(100)
+    data_contratacao : DATE
+    tempo_servico : INTEGER
+}
+
+entity "TELEFONE_PROPRIETÁRIO" as telefone {
+    * cpf_proprietario : VARCHAR(11) <<FK, KEY>>
+    * numero : VARCHAR(15) <<KEY>>
+    --
+    tipo : VARCHAR(20)
+}
+
+proprietario ||--o{ veiculo : possui
+veiculo }o--|| modelo : tem
+veiculo }o--|| categoria : pertence
+veiculo ||--o{ ocorrencia : "envolvido em"
+tipo_infraçao ||--o{ ocorrencia : registrada
+local ||--o{ ocorrencia : "ocorre em"
+agente ||--o{ ocorrencia : "registra"
+proprietario ||--o{ telefone : "tem"
+
+note right of proprietario
+    Entidade central de proprietários
+    Identificada pelo CPF
+    Sistema: PostgreSQL
+end note
+
+note right of ocorrencia
+    Representa cada infração registrada
+    Relaciona veículo, tipo de infração,
+    local, data/hora e agente responsável
+end note
+
+@enduml
